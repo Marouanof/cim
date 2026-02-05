@@ -16,31 +16,35 @@
 <br/>
 
 # V2.0
-- [x] Upgrade to JDK17 & springboot3.0 
-- [x] Client SDK 
-- [ ] Client use [picocli](https://picocli.info/) instead of springboot.
-- [x] Support integration testing.
-- [ ] Integrate OpenTelemetry .
-- [ ] Support single node startup(Contains no components).
-- [ ] Third-party components support replacement(Redis/Zookeeper, etc.).
-- [ ] Support web client(websocket).
-- [x] Support docker container.
-- [ ] Support kubernetes operation.
-- [ ] Supports binary client(build with golang).
+- [x] Mise à niveau vers JDK17 & Spring Boot 3.0
+- [x] SDK Client 
+- [ ] Le client utilise [picocli](https://picocli.info/) à la place de Spring Boot
+- [x] Prise en charge des tests d'intégration
+- [ ] Intégration d'OpenTelemetry
+- [ ] Prise en charge du démarrage en nœud unique (sans composants externes)
+- [ ] Possibilité de remplacer les composants tiers (Redis/Zookeeper, etc.)
+- [ ] Support du client web (WebSocket)
+- [x] Support des conteneurs Docker
+- [ ] Support des déploiements Kubernetes
+- [ ] Support du client binaire (compilé avec Golang)
 
 ## Introduction
 
-`CIM(CROSS-IM)` is an `IM (instant messaging)` system for developers; it also provides some components to help developers build their own scalable `IM`.
-Using `CIM`, you can achieve the following requirements:
-- `IM` instant messaging system.
-- Message push middleware for `APP`.
-- Message middleware for `IOT` massive connection scenarios.
+`CIM (CROSS-IM) est un système de messagerie instantanée (IM) conçu pour les développeurs ; il fournit également des composants pour aider les développeurs à construire leur propre système IM évolutif.
 
-> If you have any questions during use or development, you can [contact me](#联系作者).
+Avec CIM, vous pouvez répondre aux besoins suivants :
 
-## 视频演示
+Système de messagerie instantanée (IM).
 
-> 点击下方链接可以查看视频版 Demo。
+Intergiciel de notification push pour les applications mobiles.
+
+Intergiciel de messagerie pour les scénarios de connexion massive d'appareils IoT.
+
+> Si vous avez des questions pendant l'utilisation ou le développement, vous pouvez [me contacter](#联系作者).
+
+## Démonstration vidéo
+
+> Cliquez sur les liens ci-dessous pour voir la version vidéo Demo :
 
 | YouTube | Bilibili|
 | :------:| :------: | 
