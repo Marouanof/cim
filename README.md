@@ -76,47 +76,47 @@ Intergiciel de messagerie pour les scénarios de connexion massive d'appareils I
 
 ![](pic/architecture.png)
 
-- Each component in `CIM` is built using `SpringBoot`
-  - Client build with [cim-client-sdk](https://github.com/crossoverJie/cim/tree/master/cim-client-sdk)
-- Use `Netty` to build the underlying communication.
-- `MetaStore` is used for registration and discovery of `IM-server` services.
+- Chaque composant de `CIM` est construit en utilisant `SpringBoot`
+- Le client est construit avec [cim-client-sdk](https://github.com/crossoverJie/cim/tree/master/cim-client-sdk)
+- Utilise `Netty` pour construire la communication de bas niveau.
+- `MetaStore` est utilisé pour l'enregistrement et la découverte des services `IM-server`.
 
 
 ### cim-server
-IM server is used to receive client connections, message forwarding, message push, etc.
-Support cluster deployment.
+Le serveur IM est utilisé pour recevoir les connexions clients, le transfert de messages, l'envoi de notifications push, etc.
+Prend en charge le déploiement en cluster.
 
 ### cim-route
 
-Route server; used to process message routing, message forwarding, user login, user offline, and some operation tools (get the number of online users, etc.).
+Serveur de routage ; utilisé pour traiter le routage des messages, leur transfert, la connexion des utilisateurs, leur déconnexion, ainsi que certaines opérations de gestion (obtenir le nombre d'utilisateurs en ligne, etc.).
 
 ### cim-client
-IM client terminal, a command can be started and initiated to communicate with others (group chat, private chat).
+Terminal client IM, une simple commande permet de le démarrer et d'initier la communication avec d'autres personnes (chat de groupe, chat privé).
 
 ## Flow Chart
 
 ![](https://s2.loli.net/2024/10/13/8teMn7BSa5VWuvi.png)
 
-- Server register to `MetaStore`
-- Route subscribe `MetaStore`
-- Client login to Route
-  - Route get Server info from `MetaStore`
-- Client open connection to Server
-- Client1 send message to Route
-- Route select Server and forward message to Server
-- Server push message to Client2
+- Le serveur s'enregistre auprès de `MetaStore`
+- Le routeur s'abonne à `MetaStore`
+- Le client se connecte au routeur
+  - Le routeur récupère les informations du serveur depuis `MetaStore`
+- Le client ouvre une connexion vers le serveur
+- Le Client1 envoie un message au routeur
+- Le routeur sélectionne un serveur et transfère le message vers ce serveur
+- Le serveur envoie (push) le message au Client2
 
 
-## Quick start
+## Démarrage rapide
 
-Use allin1 docker to start the server:
+Utilisez la commande allin1 Docker pour démarrer le serveur :
 
 ```shell
 docker pull docker pull ghcr.io/crossoverjie/allin1-ubuntu:latest
 docker run -p 2181:2181 -p 6379:6379 -p 8083:8083 --rm --name cim-allin1  ghcr.io/crossoverjie/allin1-ubuntu:latest
 ```
 
-### Build in local
+### Demarrage Local
 ```shell
 
 首先需要安装 `Zookeeper、Redis` 并保证网络通畅。
@@ -134,7 +134,7 @@ cd cim-server && cim-client && cim-forward-route
 mvn clean package spring-boot:repackage -DskipTests=true
 ```
 
-### 部署 IM-server(cim-server)
+### Déploiement IM-server(cim-server)
 
 ```shell
 cp /cim/cim-server/target/cim-server-1.0.0-SNAPSHOT.jar /xx/work/server0/
@@ -142,9 +142,9 @@ cd /xx/work/server0/
 nohup java -jar  /root/work/server0/cim-server-1.0.0-SNAPSHOT.jar --cim.server.port=9000 --app.zk.addr=zk地址  > /root/work/server0/log.file 2>&1 &
 ```
 
-> cim-server 集群部署同理，只要保证 Zookeeper 地址相同即可。
+> cim-server Le déploiement en cluster suit le même principe，Il suffit de s'assurer que Zookeeper les adresses soient identiques。
 
-### 部署路由服务器(cim-forward-route)
+### Déployer le serveur de routage (cim-forward-route)
 
 ```shell
 cp /cim/cim-server/cim-forward-route/target/cim-forward-route-1.0.0-SNAPSHOT.jar /xx/work/route0/
@@ -152,10 +152,10 @@ cd /xx/work/route0/
 nohup java -jar  /root/work/route0/cim-forward-route-1.0.0-SNAPSHOT.jar --app.zk.addr=zk地址 --spring.redis.host=redis地址 --spring.redis.port=6379  > /root/work/route/log.file 2>&1 &
 ```
 
-> cim-forward-route 本身就是无状态，可以部署多台；使用 Nginx 代理即可。
+> cim-forward-route est intrinsèquement sans état，peut être déployé sur plusieurs instances；Utilisez Nginx un proxy suffit.
 
 
-### 启动客户端
+### Démarrer le client
 
 ```shell
 cp /cim/cim-client/target/cim-client-1.0.0-SNAPSHOT.jar /xx/work/route0/
@@ -166,11 +166,11 @@ java -jar cim-client-1.0.0-SNAPSHOT.jar --server.port=8084 --cim.user.id=唯一�
 ![](https://ws2.sinaimg.cn/large/006tNbRwly1fylgxjgshfj31vo04m7p9.jpg)
 ![](https://ws1.sinaimg.cn/large/006tNbRwly1fylgxu0x4uj31hy04q75z.jpg)
 
-如上图，启动两个客户端可以互相通信即可。
+Comme illustré ci-dessus, démarrez deux clients qui pourront communiquer entre eux.。
 
-### 本地启动客户端
+### Démarrer le client localement
 
-#### 注册账号
+#### S'inscrire / Créer un compte
 ```shell
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
   "reqNo": "1234567890",
@@ -179,7 +179,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: applica
 }' 'http://路由服务器:8083/registerAccount'
 ```
 
-从返回结果中获取 `userId`
+Extraire / Obtenir depuis les résultats retournés `userId`
 
 ```json
 {
@@ -193,7 +193,7 @@ curl -X POST --header 'Content-Type: application/json' --header 'Accept: applica
 }
 ```
 
-#### 启动本地客户端
+#### Démarrer le client local
 ```shell
 # 启动本地客户端
 cp /cim/cim-client/target/cim-client-1.0.0-SNAPSHOT.jar /xx/work/route0/
@@ -201,65 +201,63 @@ cd /xx/work/route0/
 java -jar cim-client-1.0.0-SNAPSHOT.jar --server.port=8084 --cim.user.id=上方返回的userId --cim.user.userName=用户名 --cim.route.url=http://路由服务器:8083/
 ```
 
-## 客户端内置命令
+## Commandes intégrées du client
 
-| 命令 | 描述|
+| Commande | Description|
 | ------ | ------ | 
-| `:q!` | 退出客户端| 
-| `:olu` | 获取所有在线用户信息 | 
-| `:all` | 获取所有命令 | 
-| `:q [option]` | 【:q 关键字】查询聊天记录 | 
-| `:ai` | 开启 AI 模式 | 
-| `:qai` | 关闭 AI 模式 | 
-| `:pu` | 模糊匹配用户 | 
-| `:info` | 获取客户端信息 | 
-| `:emoji [option]` | 查询表情包 [option:页码] | 
-| `:delay [msg] [delayTime]` | 发送延时消息 | 
-| `:` | 更多命令正在开发中。。 | 
+| `:q!` | Quitter le client| 
+| `:olu` | Obtenir les informations de tous les utilisateurs en ligne | 
+| `:all` | Obtenir toutes les commandes disponibles | 
+| `:q [option]` | 【:q [Mot-clé] Rechercher l'historique des discussions | 
+| `:ai` | Activer le mode IA | 
+| `:qai` | Désactiver le mode IA | 
+| `:pu` |Recherche approximative d'utilisateurs | 
+| `:info` | Obtenir les informations du client | 
+| `:emoji [option]` | Rechercher des emojis/mèmes [option: numéro de page] | 
+| `:delay [msg] [delayTime]` | Envoyer un message différé | 
+| `:` | D'autres commandes sont en cours de développement。 | 
 
 ![](https://ws3.sinaimg.cn/large/006tNbRwly1fylh7bdlo6g30go01shdt.gif)
 
-### 聊天记录查询
+### Consultation de l'historique des discussions
 
 ![](https://i.loli.net/2019/05/08/5cd1c310cb796.jpg)
 
-使用命令 `:q 关键字` 即可查询与个人相关的聊天记录。
+Utilisez la commande `:q 关键字` pour consulter l'historique des discussions liées à votre compte。
 
-> 客户端聊天记录默认存放在 `/opt/logs/cim/`，所以需要这个目录的写入权限。也可在启动命令中加入 `--cim.msg.logger.path = /自定义` 参数自定义目录。
+> L'historique des discussions du client est stocké par défaut dans `/opt/logs/cim/`，Il est donc nécessaire d'avoir les permissions d'écriture sur ce répertoire. Vous pouvez également ajouter dans la commande de démarrage :
+
+ `--cim.msg.logger.path = /自定义` le paramètre pour personnaliser le répertoire.
 
 
-
-### AI 模式
+### AI Mode
 
 ![](https://i.loli.net/2019/05/08/5cd1c30e47d95.jpg)
 
-使用命令 `:ai` 开启 AI 模式，之后所有的消息都会由 `AI` 响应。
+Utilisez la commande `:ai` pour activer le mode IA, après quoi tous les messages seront traités par `AI` pour générer une réponse.
 
-`:qai` 退出 AI 模式。
+`:qai` pour quitter le mode AI。
 
-### 前缀匹配用户名
+### Recherche d'utilisateurs par préfixe de nom
 
 ![](https://i.loli.net/2019/05/08/5cd1c32ac3397.jpg)
 
-使用命令 `:qu prefix` 可以按照前缀的方式搜索用户信息。
+Utilisez la commande `:qu prefix` pour rechercher des informations d'utilisateur par préfixe.
 
-> 该功能主要用于在移动端中的输入框中搜索用户。 
+> Cette fonction est principalement utilisée pour rechercher des utilisateurs depuis les champs de saisie sur les appareils mobiles.
+### Discussion de groupe / Discussion privée
 
-### 群聊/私聊
-
-#### 群聊
-
+#### Discussion de groupe
 ![](https://ws1.sinaimg.cn/large/006tNbRwly1fyli54e8e1j31t0056x11.jpg)
 ![](https://ws3.sinaimg.cn/large/006tNbRwly1fyli5yyspmj31im06atb8.jpg)
 ![](https://ws3.sinaimg.cn/large/006tNbRwly1fyli6sn3c8j31ss06qmzq.jpg)
 
-群聊只需要在控制台里输入消息回车后即可发送，同时所有在线客户端都可收到消息。
+Pour une discussion de groupe, il suffit de saisir le message dans la console et d'appuyer sur Entrée pour l'envoyer. Tous les clients en ligne recevront alors le message.
+#### Discussion privée
 
-#### 私聊
+Pour une discussion privée, il faut d'abord connaître l'identifiant (ID) de l'autre personne `userID` avant de pouvoir communiquer。
 
-私聊首先需要知道对方的 `userID` 才能进行。
-
-输入命令 `:olu` 可列出所有在线用户。
+Saisissez la commande `:olu` pour lister tous les utilisateurs en ligne.
 
 ![](https://ws4.sinaimg.cn/large/006tNbRwly1fyli98mlf3j31ta06mwhv.jpg)
 
@@ -296,8 +294,7 @@ java -jar cim-client-1.0.0-SNAPSHOT.jar --server.port=8084 --cim.user.id=上方�
 
 ## Contributing
 
-We welcome contributions! Before submitting a PR, please ensure your code passes the Checkstyle check.
-
+Nous accueillons volontiers les contributions ! Avant de soumettre une Pull Request (PR), assurez-vous que votre code passe la vérification Checkstyle.
 ### Code Style
 
 This project uses [Checkstyle](https://checkstyle.org/) to enforce code style. The rules are defined in `checkstyle/checkstyle.xml`.
@@ -327,12 +324,11 @@ mvn package -Dcheckstyle.skip=true
 <a href="https://t.zsxq.com/odQDJ" target="_blank"><img src="https://s2.loli.net/2024/05/17/zRkabDu2SKfChLX.png" alt="202405171520366.png"></a>
 </div>
 
-最近开通了知识星球，感谢大家对 CIM 的支持，为大家提供 100 份 10 元优惠券，也就是 69-10=59 元，具体福利大家可以扫码参考再决定是否加入。
-
-> PS: 后续会在星球开始 V2.0 版本的重构，感兴趣的可以加入星球当面催更（当然代码依然会开源）。
+J'ai récemment ouvert une "Knowledge Planet" (communauté de savoir). Merci à tous pour votre soutien à CIM. Je vous propose 100 coupons de réduction de 10 yuans, soit 69-10 = 59 yuans. Pour les avantages spécifiques, vous pouvez scanner le code QR pour plus de détails avant de décider de rejoindre ou non.
+PS : Par la suite, je commencerai la refonte de la version 2.0 dans la Knowledge Planet. Ceux que cela intéresse peuvent rejoindre la communauté pour suivre de près l'avancement (le code restera bien sûr open source).
 
 - [crossoverJie@gmail.com](mailto:crossoverJie@gmail.com)
-- 微信公众号
+- Compte public WeChat
 
 ![index.jpg](https://i.loli.net/2021/10/12/ckQW9LYXSxFogJZ.jpg)
 
