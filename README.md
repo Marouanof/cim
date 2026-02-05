@@ -9,7 +9,7 @@
 [![Build Status](https://img.shields.io/badge/cim-cross--im-brightgreen.svg)](https://github.com/crossoverJie/cim)
 [![](https://badge.juejin.im/entry/5c2c000e6fb9a049f5713e26/likes.svg?style=flat-square)](https://juejin.im/post/5c2bffdc51882509181395d7)
 
-📘[介绍](#介绍) |📽[视频演示](#视频演示) | 🏖[TODO LIST](#todo-list) | 🌈[系统架构](#系统架构) |💡[流程图](#流程图)|🌁[快速启动](#快速启动)|👨🏻‍✈️[内置命令](#客户端内置命令)|🎤[通信](#群聊私聊)|❓[QA](https://github.com/crossoverJie/cim/blob/master/doc/QA.md)|💌[联系作者](#联系作者)
+📘[Introduction](#介绍) |📽[Demonstration video](#视频演示) | 🏖[Liste des taches](#todo-list) | 🌈[Architecture du systeme](#系统架构) |💡[Organigramme](#流程图)|🌁[Demarrage rapide](#快速启动)|👨🏻‍✈️[Commandes intégrées](#客户端内置命令)|🎤[Communication](#群聊私聊)|❓[QA](https://github.com/crossoverJie/cim/blob/master/doc/QA.md)|💌[Contacter l'auteur](#联系作者)
 
 
 </div>
